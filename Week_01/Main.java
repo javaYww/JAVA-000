@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 
 public class Main extends ClassLoader {
 
-	private static String filePath = "Hello.xlass";
+	private static String fileSuffix = ".xlass";
 
 	private static String fileName = "Hello";
 
@@ -23,12 +23,12 @@ public class Main extends ClassLoader {
 	@Override
 	protected Class<?> findClass(String name) throws ClassNotFoundException {
 		try {
-			Path path = Paths.get(filePath);
+			Path path = Paths.get(name + fileSuffix);
 			byte[] bytes = Files.readAllBytes(path);
 			for (int i = 0; i < bytes.length; i++) {
 				bytes[i] = (byte) (255 - bytes[i]);
 			}
-			return defineClass(fileName, bytes, 0, bytes.length);
+			return defineClass(name, bytes, 0, bytes.length);
 		} catch (IOException e) {
 			throw new ClassNotFoundException();
 		}
