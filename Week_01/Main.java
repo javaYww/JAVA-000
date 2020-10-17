@@ -1,5 +1,5 @@
+import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,14 +23,14 @@ public class Main extends ClassLoader {
 	@Override
 	protected Class<?> findClass(String name) throws ClassNotFoundException {
 		try {
-			Path path = Paths.get(String.valueOf(new URL(filePath)));
+			Path path = Paths.get(filePath);
 			byte[] bytes = Files.readAllBytes(path);
 			for (int i = 0; i < bytes.length; i++) {
 				bytes[i] = (byte) (255 - bytes[i]);
 			}
 			return defineClass(fileName, bytes, 0, bytes.length);
-		} catch (Exception e) {
-			return null;
+		} catch (IOException e) {
+			throw new ClassNotFoundException();
 		}
 	}
 }
