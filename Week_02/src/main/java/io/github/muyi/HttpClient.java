@@ -14,7 +14,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 
 public class HttpClient {
-	private static final String URL = "http://localhost:8801";
+	private static final String URL = "http://localhost:8088";
 
 	public static void main(String[] args) {
 		httpClientGet(URL);

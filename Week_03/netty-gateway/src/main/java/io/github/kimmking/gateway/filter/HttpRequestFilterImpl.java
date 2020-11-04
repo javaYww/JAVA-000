@@ -10,7 +10,7 @@ public class HttpRequestFilterImpl extends SimpleChannelInboundHandler<FullHttpR
     @Override
     public void filter(FullHttpRequest fullRequest, ChannelHandlerContext ctx) {
         fullRequest.headers().set("nio", "yangwangwang");
-        ctx.read();
+        ctx.fireChannelRead(fullRequest);
     }
 
     @Override

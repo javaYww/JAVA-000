@@ -30,12 +30,15 @@ public class OkhttpOutboundHandler {
         int cores = Runtime.getRuntime().availableProcessors() * 2;
         long keepAliveTime = 1000;
         int queueSize = 2048;
+
+        httpclient = new OkHttpClient();
+
         RejectedExecutionHandler handler = new ThreadPoolExecutor.CallerRunsPolicy();//.DiscardPolicy();
         proxyService = new ThreadPoolExecutor(cores, cores,
                 keepAliveTime, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(queueSize),
                 new NamedThreadFactory("proxyService"), handler);
 
-        httpclient = new OkHttpClient();
+
     }
 
     public void handle(final FullHttpRequest fullRequest, final ChannelHandlerContext ctx) {
@@ -72,10 +75,10 @@ public class OkhttpOutboundHandler {
         } finally {
             if (fullRequest != null) {
                 if (!HttpUtil.isKeepAlive(fullRequest)) {
-                    ctx.write(response).addListener(ChannelFutureListener.CLOSE);
+                    ctx.write(rowResponse).addListener(ChannelFutureListener.CLOSE);
                 } else {
                     //response.headers().set(CONNECTION, KEEP_ALIVE);
-                    ctx.write(response);
+                    ctx.write(rowResponse);
                 }
             }
             ctx.flush();
